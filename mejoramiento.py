@@ -44,11 +44,11 @@ def permutate(solution, k):
         a = choice(range(len(solution)))
         b = choice(range(len(solution)))
         swap(new_solution, a, b)
-        print "Trying with: {}".format(new_solution)
-        if is_solution(new_solution) and calc_solution(new_solution) > current_score:
-            show_current(new_solution)
-        else:
-            permutate(solution, k)
+    print "Trying with: {}".format(new_solution)
+    if is_solution(new_solution) and calc_solution(new_solution) > current_score:
+        return new_solution
+    else:
+        permutate(solution, k)
 
 
 
@@ -71,7 +71,11 @@ def calc_solution(solution):
 def main():
     args = parse_args()
     show_current(args.solution)
-    permutate(**vars(args))
+    try:
+        new_solution = permutate(**vars(args))
+        show_current(new_solution)
+    except RuntimeError:
+        print "No solution found"
 
 
 if __name__ == '__main__':
