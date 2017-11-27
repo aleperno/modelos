@@ -34,10 +34,23 @@ MONTO = {'O': 0,
          'E': -10000, 
          'F': 40000, 
          'G': -7500, 
-         'H': 42000, 
+         'H': 4000, 
          'I': -5000, 
-         'J':-30000
+         'J':-10000
         }
+
+MONTO_2 = {	 'O': 0, 
+	         'A': 100, 
+	         'B': -100, 
+	         'C': 100, 
+	         'D': -100, 
+	         'E': 100, 
+	         'F': -100, 
+	         'G': 100, 
+	         'H': -100, 
+	         'I': 100, 
+	         'J': 100
+	        }
 
 POS = {'O':0, 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,'G': 7, 'H': 8, 'I': 9, 'J': 10}
 
@@ -73,14 +86,14 @@ def obtenerDistancia(bancoActual,banco):
 
 #Obtiene el costo de visitar el banco en base a la heuristica
 def obtenerCostoDelBanco(bancoActual, banco):
-	return N*obtenerDistancia(bancoActual,banco)+ M*MONTO[banco]
+	return N*obtenerDistancia(bancoActual,banco)+ M*abs(MONTO[banco])
 
 #Define cual sera el siguiente banco a visitar
 def elegirSiguienteBanco(bancoActual, dineroCamion):
 	costoMin = float('inf')
 	bancoMin = ''
 	for banco in bancosSinVisitar:
-		if (banco != bancoActual and (dineroCamion+MONTO[banco] > 0) and (dineroCamion+MONTO[banco] <= MAX_CAMION)):
+		if (banco != bancoActual and (dineroCamion+MONTO[banco] >= 0) and (dineroCamion+MONTO[banco] <= MAX_CAMION)):
 			costoBanco = obtenerCostoDelBanco(bancoActual,banco)
 			if (costoBanco < costoMin):
 				bancoMin = banco
