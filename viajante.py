@@ -26,7 +26,18 @@ N = 1
 
 BANCOS = ['O', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
-MONTO = {'O': 0, 'A': -44036, 'B': -9025, 'C': 34580, 'D': -46829, 'E': -16677, 'F': 37619, 'G': 48998, 'H': 42037, 'I': -5090, 'J':-33475}
+MONTO = {'O': 0, 
+         'A': -44036, 
+         'B': -9025, 
+         'C': 34580, 
+         'D': -46829, 
+         'E': -16677, 
+         'F': 37619, 
+         'G': 48998, 
+         'H': 42037, 
+         'I': -5090, 
+         'J':-33475
+        }
 
 POS = {'O':0, 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,'G': 7, 'H': 8, 'I': 9, 'J': 10}
 
@@ -48,7 +59,7 @@ costoTotalDelViaje = 0
 
 ################################ Resolucion ####################################
 
-def obtenerCostoDelBanco(bancoActual, banco, dineroCamion)
+def obtenerCostoDelBanco(bancoActual, banco, dineroCamion):
     distancia = obtenerDistancia(bancoActual,banco)
     montoRestante,dineroCamion = obtenerMontoRestante(dineroCamion,banco)
     costo = obtenerCostoTotal(distancia,montoRestante)
@@ -56,42 +67,42 @@ def obtenerCostoDelBanco(bancoActual, banco, dineroCamion)
 
 def elegirSiguienteBanco(bancoActual, dineroCamion):
 	costoMin = float('inf')
-    bancoMin = ''
-    for banco in bancosSinVisitar:
-        if (banco != bancoActual and (dineroCamion+MONTO[banco] > 0) and (dineroCamion+MONTO[banco] <= MAX_CAMION)):
-            costoBanco = obtenerCostoDelBanco(bancoActual,banco,dineroCamion)
-            if (costoBanco < costoMin):
-                bancoMin = banco
-                costoMin = costoBanco
-    global costoTotalDelViaje
-    costoTotalDelViaje += costoMin
-    return bancoMin
+	bancoMin = ''
+	for banco in bancosSinVisitar:
+		if (banco != bancoActual and (dineroCamion+MONTO[banco] > 0) and (dineroCamion+MONTO[banco] <= MAX_CAMION)):
+			costoBanco = obtenerCostoDelBanco(bancoActual,banco,dineroCamion)
+			if (costoBanco < costoMin):
+				bancoMin = banco
+				costoMin = costoBanco
+	global costoTotalDelViaje
+	costoTotalDelViaje += costoMin
+	return bancoMin
 
 def aplicarHeuristicaDeConstruccion():
 	solucion = ['O']
 	bancoActual = 'O'
-    dineroCamion = 0
-    numeroDePaso = 1
-    
+	dineroCamion = 0
+	numeroDePaso = 1
 
-    while (len(solucion)<len(bancos)):
-        bancoElegido = elegirSiguienteBanco(bancoActual,dineroCamion)
-        dineroCamion += MONTO[bancoElegido]
-        visitarBanco(bancoElegido)
-	    bancosSinVisitar.remove(bancoElegido)
-	    solucionConstruccion.append(bancoElegido)
-        bancoActual = bancoElegido
-        print('Numero De Paso: '+str(numeroDePaso))   
-        print('Banco Elegido: '+bancoActual)
-        print('Dinero del Camion: '+str(dineroCamion)+ '\n')
-        numeroDePaso += 1
-    
 
-    agregarVueltaAlInicio(bancoActual)
-    print('Camino obtenido:')        
-    print(bancosVisitados)
-    print('Costo total del viaje obtenido:')        
-    print(costoTotalDelViaje)
+	while (len(solucion)<len(bancos)):
+		bancoElegido = elegirSiguienteBanco(bancoActual,dineroCamion)
+		dineroCamion += MONTO[bancoElegido]
+		visitarBanco(bancoElegido)
+		bancosSinVisitar.remove(bancoElegido)
+		solucionConstruccion.append(bancoElegido)
+		bancoActual = bancoElegido
+		print('Numero De Paso: '+str(numeroDePaso))   
+		print('Banco Elegido: '+bancoActual)
+		print('Dinero del Camion: '+str(dineroCamion)+ '\n')
+		numeroDePaso += 1
+
+
+	agregarVueltaAlInicio(bancoActual)
+	print('Camino obtenido:')        
+	print(bancosVisitados)
+	print('Costo total del viaje obtenido:')        
+	print(costoTotalDelViaje)
 
 
 	return solucion
@@ -101,6 +112,6 @@ def aplicarHeuristicaDeMejoramiento(solucionOpcional):
 	return solucion
 
 def main( ):
-    print("Tp presentacion final modelos y optimizacion 1\n")
-    solucionConstruccion = aplicarHeuristicaDeConstruccion()
-    aplicarHeuristicaDeMejoramiento(solucionConstruccion)
+	print("Tp presentacion final modelos y optimizacion 1\n")
+	solucionConstruccion = aplicarHeuristicaDeConstruccion()
+	aplicarHeuristicaDeMejoramiento(solucionConstruccion)
