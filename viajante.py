@@ -27,16 +27,16 @@ N = 1
 BANCOS = ['O', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
 MONTO = {'O': 0, 
-         'A': -44036, 
-         'B': -9025, 
-         'C': 34580, 
-         'D': -46829, 
-         'E': -16677, 
-         'F': 37619, 
-         'G': 48998, 
-         'H': 42037, 
-         'I': -5090, 
-         'J':-33475
+         'A': -4000, 
+         'B': -9000, 
+         'C': 34000, 
+         'D': -15000, 
+         'E': -10000, 
+         'F': 40000, 
+         'G': -7500, 
+         'H': 42000, 
+         'I': -5000, 
+         'J':-30000
         }
 
 POS = {'O':0, 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6,'G': 7, 'H': 8, 'I': 9, 'J': 10}
@@ -59,48 +59,54 @@ costoTotalDelViaje = 0
 
 ################################ Resolucion ####################################
 
-def obtenerCostoDelBanco(bancoActual, banco, dineroCamion):
-    distancia = obtenerDistancia(bancoActual,banco)
-    montoRestante,dineroCamion = obtenerMontoRestante(dineroCamion,banco)
-    costo = obtenerCostoTotal(distancia,montoRestante)
-    return costo
+#Obtiene distancia de bancoActual a banco
+def obtenerDistancia(bancoActual,banco):
+    distFila = POS[bancoActual]
+    distColumna = POS[banco]
+    return DIST[distFila][distColumna]
 
+#Obtiene el costo de visitar el banco en base a la heuristica
+def obtenerCostoDelBanco(bancoActual, banco):
+	return N*obtenerDistancia(bancoActual,banco)+ M*MONTO[banco]
+
+#Define cual sera el siguiente banco a visitar
 def elegirSiguienteBanco(bancoActual, dineroCamion):
 	costoMin = float('inf')
 	bancoMin = ''
 	for banco in bancosSinVisitar:
 		if (banco != bancoActual and (dineroCamion+MONTO[banco] > 0) and (dineroCamion+MONTO[banco] <= MAX_CAMION)):
-			costoBanco = obtenerCostoDelBanco(bancoActual,banco,dineroCamion)
+			costoBanco = obtenerCostoDelBanco(bancoActual,banco)
 			if (costoBanco < costoMin):
 				bancoMin = banco
 				costoMin = costoBanco
-	global costoTotalDelViaje
-	costoTotalDelViaje += costoMin
 	return bancoMin
+
+def agregarVueltaAlInicio(solucion,bancoActual):
+    solucion.append('O')
+    costo = obtenerDistancia(bancoActual,'O')
 
 def aplicarHeuristicaDeConstruccion():
 	solucion = ['O']
 	bancoActual = 'O'
 	dineroCamion = 0
 	numeroDePaso = 1
-
-
-	while (len(solucion)<len(bancos)):
+	while (len(solucion)<len(BANCOS)):
 		bancoElegido = elegirSiguienteBanco(bancoActual,dineroCamion)
+		if(bancoElegido == ''):
+			print('No encontro solucion')
+			break
 		dineroCamion += MONTO[bancoElegido]
-		visitarBanco(bancoElegido)
 		bancosSinVisitar.remove(bancoElegido)
-		solucionConstruccion.append(bancoElegido)
+		solucion.append(bancoElegido)
 		bancoActual = bancoElegido
 		print('Numero De Paso: '+str(numeroDePaso))   
 		print('Banco Elegido: '+bancoActual)
 		print('Dinero del Camion: '+str(dineroCamion)+ '\n')
 		numeroDePaso += 1
 
-
-	agregarVueltaAlInicio(bancoActual)
+	agregarVueltaAlInicio(solucion,bancoActual)
 	print('Camino obtenido:')        
-	print(bancosVisitados)
+	print(solucion)
 	print('Costo total del viaje obtenido:')        
 	print(costoTotalDelViaje)
 
@@ -115,3 +121,7 @@ def main( ):
 	print("Tp presentacion final modelos y optimizacion 1\n")
 	solucionConstruccion = aplicarHeuristicaDeConstruccion()
 	aplicarHeuristicaDeMejoramiento(solucionConstruccion)
+
+###############################################################################
+
+main()
