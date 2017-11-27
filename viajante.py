@@ -59,6 +59,12 @@ costoTotalDelViaje = 0
 
 ################################ Resolucion ####################################
 
+def calcularCostoCamino(camino):
+    costo = 0
+    for banco in range(1, len(camino)):
+        costo += obtenerDistancia(camino[banco-1], camino[banco])
+    return costo
+
 #Obtiene distancia de bancoActual a banco
 def obtenerDistancia(bancoActual,banco):
     distFila = POS[bancoActual]
@@ -108,9 +114,7 @@ def aplicarHeuristicaDeConstruccion():
 	print('Camino obtenido:')        
 	print(solucion)
 	print('Costo total del viaje obtenido:')        
-	print(costoTotalDelViaje)
-
-
+	print(calcularCostoCamino(solucion))
 	return solucion
 
 def aplicarHeuristicaDeMejoramiento(solucionOpcional):
